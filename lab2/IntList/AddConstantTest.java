@@ -14,15 +14,15 @@ public class AddConstantTest {
 
     @Test
     public void testAddConstantTwo() {
-        IntList lst = IntList.of(1, 2, 3, 4, 5);
-        IntListExercises.addConstant(lst, 2);
-        assertEquals("3 -> 4 -> 5 -> 6 -> 7", lst.toString());
+        IntList lst = IntList.of(2,23);
+        IntListExercises.addConstant(lst, -3);
+        assertEquals("-1 -> 20", lst.toString());
     }
 
     @Test
     public void testAddToLargeList() {
-        IntList lst = IntList.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        IntList lst = IntList.of(1, 2);
         IntListExercises.addConstant(lst, 10);
-        assertEquals("11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17 -> 18 -> 19", lst.toString());
+        assertEquals("11 -> 12", lst.toString());
     }
 }
