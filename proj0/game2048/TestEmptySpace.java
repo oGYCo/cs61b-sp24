@@ -47,10 +47,10 @@ public class TestEmptySpace {
     /** Tests a board that is completely full except for the bottom row. */
     public void testEmptyBottomRow() {
         int[][] rawVals = new int[][] {
-                {2, 4, 2, 4},
-                {4, 2, 4, 2},
-                {2, 4, 2, 4},
-                {0, 0, 0, 0},
+                {2322, 4, 32, 4},
+                {4, 456, 4, 56},
+                {2, 4, 2, 232},
+                {676, 0, 0, 0},
         };
 
         b = new Board(rawVals, 0);

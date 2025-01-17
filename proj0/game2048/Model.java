@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author oGYCo
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -109,10 +109,35 @@ public class Model extends Observable {
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
-
+        board.setViewingPerspective(side);
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        for(int col=0; col<=3; col++) {
+            boolean[] merged={false, false, false, false};
+            for(int row=3; row>=0; row--) {
+                for(int front=3;front>row;front--) {
+                    Tile t=board.tile(col, row);
+                    boolean moved = false;
+                    if(t==null) {
+                        continue;
+                    }
+                    Tile Fronttile=board.tile(col,front);
+                    if(Fronttile==null|| Fronttile.value()==t.value()&&!merged[front]) {
+                        merged[front]=board.move(col,front,t);
+                        if(merged[front]) {
+                            score+=t.value()*2;
+                        }
+                        changed=true;
+                        moved=true;
+                    }
+                    if(moved) {
+                        break;
+                    }
+                }
+            }
+        }
+        board.setViewingPerspective(Side.NORTH);
 
         checkGameOver();
         if (changed) {
@@ -137,8 +162,15 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
-        return false;
+        boolean empty = false;
+        for(int row = 0; row < 4; row++) {
+            for(int col = 0; col < 4; col++) {
+                if(b.tile(col,row)==null) {
+                    empty = true;
+                }
+            }
+        }
+        return empty;
     }
 
     /**
@@ -147,8 +179,23 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
-        return false;
+        boolean flag = false;
+        for(int row = 0; row < 4; row++) {
+            for(int col = 0; col < 4; col++) {
+                Tile m=b.tile(col,row);
+                if(m!=null) {
+                    int x=m.value();
+                    if(x==MAX_PIECE) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            if(flag) {
+                break;
+            }
+        }
+        return flag;
     }
 
     /**
@@ -159,7 +206,35 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
-        return false;
+        boolean flag = false;
+        if(emptySpaceExists(b)) {
+            flag = true;
+        }
+        else {
+            for (int row = 0; row < 4; row++) {
+                for (int col = 0; col < 4; col++) {
+                    int x=b.tile(col,row).value();
+                    int[][] move={{1,0},{-1,0},{0,1},{0,-1}};
+                    for(int i=0; i<4; i++) {
+                        int mx=col+move[i][0];
+                        int my=row+move[i][1];
+                        if(mx>=0 && mx<4 && my>=0 && my<4) {
+                            if(b.tile(mx,my).value()==x) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(flag) {
+                        break;
+                    }
+                }
+                if(flag) {
+                    break;
+                }
+            }
+        }
+        return flag;
     }
 
 
